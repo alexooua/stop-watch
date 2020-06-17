@@ -4,12 +4,10 @@ class State {
         this.difference = difference;
         this.suspended = suspended;
     }
-
     static ready() {
         return new State(null, 0, 0);
     }
 }
-
 class Stopwatch {
     constructor(state) {
         this.state = state;
@@ -28,23 +26,19 @@ class Stopwatch {
         this.tick = this.tick.bind(this);
         this.render();
     }
-
     static ready() {
         return new Stopwatch(State.ready());
     }
-
     setState(newState) {
         this.state = {...this.state, ...newState};
         this.render();
     }
-
     tick() {
         this.setState({
             difference: new Date(new Date() - this.state.startTimestamp)
         });
         this.requestAnimationId = requestAnimationFrame(this.tick);
     }
-
     handleClickStart() {
         debugger
         if (this.state.startTimestamp) {
@@ -56,7 +50,6 @@ class Stopwatch {
         });
         this.requestAnimationId = requestAnimationFrame(this.tick);
     }
-
     handleClickStop() {
         cancelAnimationFrame(this.requestAnimationId);
         this.setState({
@@ -64,12 +57,10 @@ class Stopwatch {
             suspended: this.state.difference
         })
     }
-
     handleClickReset() {
         cancelAnimationFrame(this.requestAnimationId);
         this.setState(State.ready());
     }
-
     render() {
         const {difference} = this.state;
         const hundredths = (difference ? Math.floor(difference.getMilliseconds() / 10) : 0).toString().padStart(2, '0');
@@ -82,5 +73,4 @@ class Stopwatch {
         document.getElementById('hundredths').textContent = hundredths;
     }
 }
-
 const STOPWATCH = Stopwatch.ready();
